@@ -1,0 +1,8 @@
+// convertendo valores
+
+let ValorEmReais = 200;
+let CotacaoDolar = 38.3;
+
+let ValorEmDolares = ValorEmReais / CotacaoDolar;
+
+console.log(ValorEmReais + " Equivalem a " + ValorEmDolares.toFixed(2) + " Dolares");
