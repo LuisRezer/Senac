@@ -1,16 +1,5 @@
-//Menu Opcao
-
 // Menu de opções
-let opcao = prompt(
-  "Escolha uma Cerveja:\n" +
-  "1 - Skol\n" +
-  "2 - Kaiser\n" +
-  "3 - Bavaria\n" +
-  "4 - Corona"
-);
-
-// Converter a entrada do usuário para número
-opcao = Number(opcao);
+let opcao = 2;
 
 // Avaliar a escolha
 switch(opcao) {
