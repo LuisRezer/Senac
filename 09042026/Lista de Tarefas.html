@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+</head>
+
+<body>
+
+    <input id="task" type="text" placeholder="Task list">
+    <button onclick="addTask()">ADD</button>
+    <ul id="list"></ul>
+
+</body>
+
+</html>
+
+<script>
+    function addTask() {
+        let input = document.getElementById('task');
+        let texto = input.value.trim();
+
+        if (!texto) return;
+
+        let list = document.getElementById('list');
+        let li = document.createElement('li');
+
+        li.textContent = texto;
+
+        let btnDelete = document.createElement('button');
+        btnDelete.textContent = 'DEL';
+        btnDelete.onclick = function () {
+            list.removeChild(li);
+        };
+
+        li.onclick = function () {
+            let estilo = li.style.textDecoration;
+            li.style.textDecoration = estilo === 'line-through' ? '' : 'line-through';
+        };
+
+        li.appendChild(btnDelete);
+        list.appendChild(li);
+        input.value = '';
+    }
+</script>
