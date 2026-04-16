@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Validação de Formulário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 250px;
+    }
+
+    .erro {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .sucesso {
+      color: green;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Cadastro</h2>
+
+  <form id="formulario">
+    <input type="text" id="nome" placeholder="Nome">
+    <div id="erro-nome" class="erro"></div>
+
+    <input type="email" id="email" placeholder="Email">
+    <div id="erro-email" class="erro"></div>
+
+    <input type="password" id="senha" placeholder="Senha">
+    <div id="erro-senha" class="erro"></div>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div id="mensagem" class="sucesso"></div>
+
+  <script>
+    const form = document.getElementById("formulario");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Pegando valores
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+
+      // Pegando elementos de erro
+      const erroNome = document.getElementById("erro-nome");
+      const erroEmail = document.getElementById("erro-email");
+      const erroSenha = document.getElementById("erro-senha");
+      const mensagem = document.getElementById("mensagem");
+
+      // Resetando mensagens
+      erroNome.textContent = "";
+      erroEmail.textContent = "";
+      erroSenha.textContent = "";
+      mensagem.textContent = "";
+
+      let valido = true;
+
+      // Validação do nome
+      if (nome.length < 3) {
+        erroNome.textContent = "O nome deve ter pelo menos 3 caracteres.";
+        valido = false;
+      }
+
+      // Validação do email
+      if (!email.includes("@") || !email.includes(".")) {
+        erroEmail.textContent = "Digite um email válido.";
+        valido = false;
+      }
+
+      // Validação da senha
+      if (senha.length < 6) {
+        erroSenha.textContent = "A senha deve ter no mínimo 6 caracteres.";
+        valido = false;
+      }
+
+      // Se tudo estiver válido
+      if (valido) {
+        mensagem.textContent = "Formulário enviado com sucesso!";
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
