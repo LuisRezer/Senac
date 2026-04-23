@@ -1,0 +1,61 @@
+1. Objetivo dos Testes:
+Define o que será validado (funcionalidades e requisitos) e por que o teste é necessário;
+-teste de operaçes 
+
+2. Metodologia de Teste:
+Modelo adotado, alinhado às práticas do ISTQB e normas como ISO/IEC/IEEE 29119. Processo ou 
+abordagem geral para organizar os testes, que pode incluir práticas, processos e a integração com 
+desenvolvimento;
+-Teste Exploratório
+-Teste de Caixa Preta
+-Teste de Caixa Branca
+-Teste de Caixa cinza
+
+3. Escopo e Testes:
+Funcionalidades e módulos incluídos e excluídos dos testes, com justificativas;
+-Funcoes principais da calculadora simples
+
+4. Tipos de Testes:
+Aplicados Testes funcionais, não funcionais Categoria ou foco específico do teste 
+dentro do processo, relacionado ao que está sendo testado.
+-Teste de Unidade
+-Teste de Integração / Interface
+-Teste de Sistema / Não funcional
+-Teste de Regressão / Automação
+
+5. Forma de Execução:
+Como os testes serão realizados manuais, automatizados ou híbridos;
+-Teste Manual
+-Teste Automatizado
+-Teste Semi-Automatizado
+
+6. Ambiente de Teste:
+Descrição da infraestrutura: hardware, software, rede, banco de dados, 
+dados de teste;
+-Computador Normal
+-VSCOD
+-Edge
+-Dados de exemplo
+
+7. Papéis e Responsabilidades:
+Define os envolvidos e suas funções (ex: QA, dev, PO, gerente de testes);
+-QA testa
+-Dev coirrige
+-Cliente Valida se estaq ok
+
+8. Riscos e Contingências Obstáculos e ações preventivas ou corretivas para garantir a execução 
+dos testes;
+-Bug no Sistema
+-Atraso na entrega
+-Focar na funcionalidade mais importantes
+
+9. Ferramentas de Teste:
+Softwares e frameworks (ex: TestLink, Selenium, Cypress, Jenkins, GitHub Actions);
+-Cypress 
+-Jest
+
+10. Métricas de Qualidade
+Indicadores para avaliar os testes: cobertura, taxa de sucesso, número de defeitos, densidade de bugs.
+-Vericar possibilidades de testes
+-Vericar possiveis erros
+-Verificar se ficou rros a serem corrigidos 
