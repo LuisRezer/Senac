@@ -1,0 +1,64 @@
+<html>
+
+<head>
+    <title>Calculadora Simples </title>
+</head>
+
+<body>
+    <script>
+    </script>
+</body>
+
+</html>
+<input id="num1" type="number" placeholder="Número 1">
+<input id="num2" type="number" placeholder="Número 2">
+<div id="resultado"></div>
+<button onclick="Somar()">Somar</button>
+<button onclick="Subtrair()">Subtrair</button>
+<button onclick="Multiplicar()">Multiplicar</button>
+<button onclick="Dividir()">Dividir</button>
+<script>
+    function Somar() {
+        const n1 = parseFloat(document.getElementById("num1").value);
+        const n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML =
+            "Resultado: " + (n1 + n2);
+    }
+
+    function Subtrair() {
+        const n1 = parseFloat(document.getElementById("num1").value);
+        const n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML =
+            "Resultado: " + (n1 - n2);
+    }
+    
+    function Multiplicar() {
+        const n1 = parseFloat(document.getElementById("num1").value);
+        const n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML =
+            "Resultado: " + (n1 * n2);
+    }
+
+    function Dividir() {
+        const n1 = parseFloat(document.getElementById("num1").value);
+        const n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML =
+            "Resultado: " + (n1 / n2);
+    }
+    if (isNaN(num1) || isNaN(num2)) {
+        document.getElementById("resultado").innerHTML =
+            "Por favor, digite números válidos.";
+
+
+    }
+
+    else {
+        document.getElementById("resultado").innerHTML =
+            "Resultado: " + (num1 + num2);
+        "Resultado: " - (num1 - num2);
+        "Resultado: " * (num1 * num2);
+        "Resultado: " / (num1 / num2);
+
+
+    }
+</script>
