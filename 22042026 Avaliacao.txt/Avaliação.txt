@@ -1,0 +1,89 @@
+Vamos criar um jogo medieval? 
+Lista de Exercícios - Lógica de Programação (HTML + JavaScript) 
+Entrada com input HTML, processamento no botão onclick e saída em div. 
+1. Você foi contratado para programar o portão de um castelo. 
+O porteiro segue estas regras: 
+● Se a pessoa tiver 18 anos ou mais, pode entrar. 
+● Caso contrário, não pode entrar. 
+Crie um programa que pergunte a idade e mostre a mensagem correta. 
+2. No mercado do reino, quem compra acima de 100 moedas ganha desconto especial. 
+Regras: 
+● Se o valor da compra for maior que 100: 
+○ mostrar "Você ganhou desconto!" 
+● Senão: 
+○ mostrar "Compra sem desconto." 
+Peça o valor da compra ao usuário. 
+3. Um dragão protege uma ponte. 
+Ele só libera passagem se a pessoa disser a palavra secreta: 
+● fogo 
+Regras: 
+● Se digitar "fogo", passa. 
+● Senão, ponte bloqueada. 
+Peça a palavra ao usuário. 
+4. Um mago precisa contar de 1 até 10 para lançar um feitiço. 
+● Crie um programa que mostre os números de 1 até 10 na tela. 
+5. Um cavaleiro precisa subir 5 degraus para entrar no castelo. 
+Crie um programa que mostre: 
+● Subindo degrau 1 
+● Subindo degrau 2 
+● ... 
+● Subindo degrau 5 
+6. Um baú mágico só abre quando a senha correta for digitada. 
+Senha correta: 
+● ouro 
+Crie um programa que continue pedindo a senha até o usuário acertar. 
+Quando acertar, mostrar: 
+● Tesouro liberado! 
+7. No torneio do reino, um guerreiro só pode participar se: 
+● tiver 16 anos ou mais 
+● e tiver espada 
+Pergunte: 
+● idade 
+● se possui espada (sim ou nao) 
+Se cumprir as duas regras: 
+● Pode participar do torneio 
+Senão: 
+● Não pode participar 
+8. Um cofre só abre se: 
+● senha correta = 1234 
+Se acertar: 
+● Cofre aberto 
+Se errar: 
+● Senha incorreta 
+Mas existe um detalhe: 
+● Se digitar vazio, mostrar: 
+○ Digite uma senha 
+9. Uma ponte mágica só libera passagem nas seguintes regras: 
+● Se a pessoa tiver 18 anos ou mais, entra direto. 
+● Se tiver entre 16 e 17 anos, só entra se estiver acompanhada. 
+● Se tiver menos de 16 anos, entrada proibida. 
+Pergunte: 
+● idade 
+● está acompanhada? (sim ou nao) 
+Mostrar resultado correto. 
+10. Uma loja criou a seguinte promoção: 
+● Compras acima de 200 reais → 20% desconto 
+● Compras acima de 100 reais → 10% desconto 
+● Até 100 reais → sem desconto 
+Pergunte o valor da compra e mostre: 
+● valor original 
+● desconto aplicado 
+● valor final 
+11. O portão do castelo só abre com a senha correta: 
+● dragon 
+O viajante pode tentar no máximo 3 vezes. 
+Regras: 
+● Se acertar antes das 3 tentativas: 
+○ mostrar Portão aberto 
+● Se errar 3 vezes: 
+○ mostrar Acesso bloqueado 
+12. Na feira do reino, 5 clientes farão compras. 
+Para cada cliente: 
+● Digite valor da compra 
+Regras: 
+● Se compra acima de 100: 
+○ mostrar Ganhou brinde 
+● Senão: 
+○ mostrar Sem brinde 
+No final mostrar: 
+● Quantos ganharam brinde
