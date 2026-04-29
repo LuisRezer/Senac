@@ -23,11 +23,11 @@
     let totalBrindes = 0;
 
     function registrarCliente() {
-      const valor = parseFloat(document.getElementById("valor").value);
-      const historico = document.getElementById("historico");
-      const resultado = document.getElementById("resultado");
-      const label = document.getElementById("label");
-      const input = document.getElementById("valor");
+      let valor = parseFloat(document.getElementById("valor").value);
+      let historico = document.getElementById("historico");
+      let resultado = document.getElementById("resultado");
+      let label = document.getElementById("label");
+      let input = document.getElementById("valor");
 
       if (isNaN(valor) || valor < 0) {
         resultado.textContent = "⚠ Informe um valor válido.";
@@ -44,7 +44,7 @@
         mensagem = "🛒 Sem brinde.";
       }
 
-      const item = document.createElement("li");
+      let item = document.createElement("li");
       item.textContent = `Cliente ${clienteAtual}: R$ ${valor.toFixed(2)} — ${mensagem}`;
       historico.appendChild(item);
 
