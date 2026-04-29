@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Feira do Reino</title>
+</head>
+<body>
+
+  <h1> Feira do Reino</h1>
+
+  <div id="formulario">
+    <p id="label">Cliente 1 de 5 — Valor da compra (R$):</p>
+    <input type="number" id="valor" min="0" step="0.01" placeholder="Ex: 120.00" />
+    <button onclick="registrarCliente()">Confirmar</button>
+  </div>
+
+  <ul id="historico"></ul>
+
+  <p id="resultado"></p>
+
+  <script>
+    let clienteAtual = 1;
+    let totalBrindes = 0;
+
+    function registrarCliente() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const historico = document.getElementById("historico");
+      const resultado = document.getElementById("resultado");
+      const label = document.getElementById("label");
+      const input = document.getElementById("valor");
+
+      if (isNaN(valor) || valor < 0) {
+        resultado.textContent = "⚠ Informe um valor válido.";
+        return;
+      }
+
+      resultado.textContent = "";
+
+      let mensagem = "";
+      if (valor > 100) {
+        totalBrindes++;
+        mensagem = "Ganhou brinde!";
+      } else {
+        mensagem = "🛒 Sem brinde.";
+      }
+
+      const item = document.createElement("li");
+      item.textContent = `Cliente ${clienteAtual}: R$ ${valor.toFixed(2)} — ${mensagem}`;
+      historico.appendChild(item);
+
+      clienteAtual++;
+      input.value = "";
+
+      if (clienteAtual <= 5) {
+        label.textContent = `Cliente ${clienteAtual} de 5 — Valor da compra (R$):`;
+        input.focus();
+      } else {
+        document.getElementById("formulario").style.display = "none";
+        resultado.textContent = `Total de clientes com brinde: ${totalBrindes} de 5`;
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cofre Mágico</title>
+</head>
+<body>
+
+  <h1> Cofre Mágico</h1>
+
+  <label for="senha">Digite a senha:</label>
+  <input type="text" id="senha" placeholder="..." />
+  <button onclick="abrirCofre()">Abrir cofre</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function abrirCofre() {
+      const senha = document.getElementById("senha").value.trim();
+      const resultado = document.getElementById("resultado");
+
+      if (senha === "") {
+        resultado.textContent = "Digite uma senha.";
+      } else if (senha === "1234") {
+        resultado.textContent = "Cofre aberto!";
+      } else {
+        resultado.textContent = "Senha incorreta.";
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Torneio do Reino</title>
+</head>
+<body>
+
+  <h1> Torneio do Reino</h1>
+
+  <label for="idade">Sua idade:</label>
+  <input type="number" id="idade" min="0" placeholder="Ex: 18" />
+
+  <br><br>
+
+  <label for="espada">Possui espada?</label>
+  <select id="espada">
+    <option value="">-- Selecione --</option>
+    <option value="sim">Sim</option>
+    <option value="nao">Não</option>
+  </select>
+
+  <br><br>
+
+  <button onclick="verificar()">Verificar</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function verificar() {
+      const idade = parseInt(document.getElementById("idade").value);
+      const espada = document.getElementById("espada").value;
+      const resultado = document.getElementById("resultado");
+
+      if (isNaN(idade) || espada === "") {
+        resultado.textContent = "⚠ Preencha todos os campos.";
+        return;
+      }
+
+      if (idade >= 16 && espada === "sim") {
+        resultado.textContent = "Pode participar do torneio!";
+      } else {
+        resultado.textContent = "Não pode participar.";
+      }
+    }
+  </script>
+
+</body>
+</html>

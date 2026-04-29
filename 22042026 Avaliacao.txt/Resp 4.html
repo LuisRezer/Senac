@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Feitiço do Mago</title>
+</head>
+<body>
+
+  <h1> Feitiço do Mago</h1>
+
+  <button onclick="lancarFeitco()">Lançar feitiço</button>
+
+  <p id="numeros"></p>
+  <p id="mensagem"></p>
+
+  <script>
+    function lancarFeitco() {
+      const numeros = document.getElementById("numeros");
+      const mensagem = document.getElementById("mensagem");
+
+      numeros.textContent = "";
+      mensagem.textContent = "";
+
+      for (let i = 1; i <= 10; i++) {
+        numeros.textContent += i + " ";
+      }
+
+      mensagem.textContent = "Feitiço lançado!";
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ponte do Dragão</title>
+</head>
+<body>
+
+  <h1> Ponte do Dragão</h1>
+
+  <label for="palavra">Digite a palavra secreta:</label>
+  <input type="text" id="palavra" placeholder="..." />
+  <button onclick="verificarSenha()">Tentar passagem</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function verificarSenha() {
+      const palavra = document.getElementById("palavra").value.trim().toLowerCase();
+      const resultado = document.getElementById("resultado");
+
+      if (palavra === "fogo") {
+        resultado.textContent = "Passagem liberada!";
+      } else {
+        resultado.textContent = "Ponte bloqueada!";
+      }
+    }
+  </script>
+
+</body>
+</html>

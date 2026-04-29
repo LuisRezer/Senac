@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Degraus do Castelo</title>
+</head>
+<body>
+
+  <h1> Degraus do Castelo</h1>
+
+  <button onclick="subirDegraus()">Subir degraus</button>
+
+  <ul id="degraus"></ul>
+  <p id="mensagem"></p>
+
+  <script>
+    function subirDegraus() {
+      const degraus = document.getElementById("degraus");
+      const mensagem = document.getElementById("mensagem");
+
+      degraus.innerHTML = "";
+      mensagem.textContent = "";
+
+      for (let i = 1; i <= 5; i++) {
+        const item = document.createElement("li");
+        item.textContent = " Subindo degrau " + i;
+        degraus.appendChild(item);
+      }
+
+      mensagem.textContent = " O cavaleiro entrou no castelo!";
+    }
+  </script>
+
+</body>
+</html>

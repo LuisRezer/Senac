@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Baú Mágico</title>
+</head>
+<body>
+
+  <h1> Baú Mágico</h1>
+
+  <label for="senha">Digite a senha:</label>
+  <input type="text" id="senha" placeholder="..." />
+  <button onclick="tentarAbrir()">Tentar abrir</button>
+
+  <p id="tentativas"></p>
+  <p id="resultado"></p>
+
+  <script>
+    let tentativas = 0;
+
+    function tentarAbrir() {
+      const senha = document.getElementById("senha").value.trim().toLowerCase();
+      const resultado = document.getElementById("resultado");
+      const contagem = document.getElementById("tentativas");
+
+      tentativas++;
+
+      if (senha === "ouro") {
+        resultado.textContent = "Tesouro liberado!";
+        contagem.textContent = "Tentativas: " + tentativas;
+        document.getElementById("senha").disabled = true;
+        document.querySelector("button").disabled = true;
+      } else {
+        resultado.textContent = "Senha errada! Tente novamente.";
+        contagem.textContent = "Tentativas: " + tentativas;
+        document.getElementById("senha").value = "";
+        document.getElementById("senha").focus();
+      }
+    }
+  </script>
+
+</body>
+</html>

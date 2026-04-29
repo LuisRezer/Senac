@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ponte Mágica</title>
+</head>
+<body>
+
+  <h1>Ponte Mágica</h1>
+
+  <label for="idade">Sua idade:</label>
+  <input type="number" id="idade" min="0" placeholder="Ex: 17" />
+
+  <br><br>
+
+  <label for="acompanhada">Está acompanhada?</label>
+  <select id="acompanhada">
+    <option value="">-- Selecione --</option>
+    <option value="sim">Sim</option>
+    <option value="nao">Não</option>
+  </select>
+
+  <br><br>
+
+  <button onclick="verificar()">Verificar passagem</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function verificar() {
+      const idade = parseInt(document.getElementById("idade").value);
+      const acompanhada = document.getElementById("acompanhada").value;
+      const resultado = document.getElementById("resultado");
+
+      if (isNaN(idade) || acompanhada === "") {
+        resultado.textContent = "⚠ Preencha todos os campos.";
+        return;
+      }
+
+      if (idade >= 18) {
+        resultado.textContent = "Passagem liberada!";
+      } else if (idade >= 16 && idade <= 17) {
+        if (acompanhada === "sim") {
+          resultado.textContent = "Passagem liberada com acompanhante!";
+        } else {
+          resultado.textContent = "Precisa estar acompanhada para entrar.";
+        }
+      } else {
+        resultado.textContent = "Entrada proibida. Menos de 16 anos.";
+      }
+    }
+  </script>
+
+</body>
+</html>

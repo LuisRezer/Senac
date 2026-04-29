@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Portão do Castelo</title>
+</head>
+<body>
+
+  <h1> Portão do Castelo</h1>
+
+  <label for="senha">Digite a senha:</label>
+  <input type="text" id="senha" placeholder="..." />
+  <button id="btn" onclick="tentarEntrar()">Tentar entrar</button>
+
+  <p id="tentativas">Tentativas restantes: 3</p>
+  <p id="resultado"></p>
+
+  <script>
+    let tentativas = 3;
+
+    function tentarEntrar() {
+      const senha = document.getElementById("senha").value.trim().toLowerCase();
+      const resultado = document.getElementById("resultado");
+      const infoTentativas = document.getElementById("tentativas");
+      const input = document.getElementById("senha");
+      const btn = document.getElementById("btn");
+
+      if (senha === "") {
+        resultado.textContent = "⚠ Digite uma senha.";
+        return;
+      }
+
+      if (senha === "dragon") {
+        resultado.textContent = "Portão aberto!";
+        infoTentativas.textContent = "";
+        input.disabled = true;
+        btn.disabled = true;
+        return;
+      }
+
+      tentativas--;
+
+      if (tentativas === 0) {
+        resultado.textContent = "Acesso bloqueado!";
+        infoTentativas.textContent = "Tentativas restantes: 0";
+        input.disabled = true;
+        btn.disabled = true;
+      } else {
+        resultado.textContent = "Senha incorreta!";
+        infoTentativas.textContent = `Tentativas restantes: ${tentativas}`;
+        input.value = "";
+        input.focus();
+      }
+    }
+  </script>
+
+</body>
+</html>

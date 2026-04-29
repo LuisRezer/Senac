@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mercado do Reino</title>
+</head>
+<body>
+
+  <h1> Mercado do Reino</h1>
+
+  <label for="valor">Valor da compra (em moedas):</label>
+  <input type="number" id="valor" min="0" placeholder="Ex: 150" />
+  <button onclick="verificarDesconto()">Verificar</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function verificarDesconto() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const resultado = document.getElementById("resultado");
+
+      if (isNaN(valor)) {
+        resultado.textContent = "Por favor, informe um valor válido.";
+      } else if (valor > 100) {
+        resultado.textContent = "Você ganhou desconto!";
+      } else {
+        resultado.textContent = "Compra sem desconto.";
+      }
+    }
+  </script>
+
+</body>
+</html>
