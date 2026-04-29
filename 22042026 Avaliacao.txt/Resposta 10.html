@@ -19,8 +19,8 @@
 
   <script>
     function calcularDesconto() {
-      const valor = parseFloat(document.getElementById("valor").value);
-      const resultado = document.getElementById("resultado");
+      let valor = parseFloat(document.getElementById("valor").value);
+      let resultado = document.getElementById("resultado");
 
       if (isNaN(valor) || valor < 0) {
         resultado.innerHTML = "<p>⚠ Informe um valor válido.</p>";
@@ -38,7 +38,7 @@
         desconto = valor * 0.10;
       }
 
-      const valorFinal = valor - desconto;
+      let valorFinal = valor - desconto;
 
       resultado.innerHTML = `
         <p>Valor original: R$ ${valor.toFixed(2)}</p>
