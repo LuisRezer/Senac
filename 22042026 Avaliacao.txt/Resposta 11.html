@@ -19,11 +19,11 @@
     let tentativas = 3;
 
     function tentarEntrar() {
-      const senha = document.getElementById("senha").value.trim().toLowerCase();
-      const resultado = document.getElementById("resultado");
-      const infoTentativas = document.getElementById("tentativas");
-      const input = document.getElementById("senha");
-      const btn = document.getElementById("btn");
+      let senha = document.getElementById("senha").value.trim().toLowerCase();
+      let resultado = document.getElementById("resultado");
+      let infoTentativas = document.getElementById("tentativas");
+      let input = document.getElementById("senha");
+      let btn = document.getElementById("btn");
 
       if (senha === "") {
         resultado.textContent = "⚠ Digite uma senha.";
