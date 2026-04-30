@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { display: flex; font-family: Arial, sans-serif; height: 100vh; }
+ 
+        .menu { width: 220px; background-color: #2c3e50; height: 100vh; padding: 20px 0; transition: width 0.3s; overflow: hidden; }
+        .menu.recolhido { width: 0; }
+        .menu h2 { color: white; font-size: 18px; white-space: nowrap; padding: 0 14px; margin-bottom: 30px; }
+        .menu a { display: flex; align-items: center; gap: 12px; color: #bdc3c7; text-decoration: none; padding: 14px; font-size: 14px; white-space: nowrap; }
+        .menu a:hover { background-color: #34495e; color: white; }
+        .menu a.ativo { background-color: #3498db; color: white; }
+ 
+        .btn-recolher { position: fixed; top: 16px; left: 16px; background-color: #2c3e50; border: none; color: white; font-size: 20px; cursor: pointer; padding: 6px 10px; border-radius: 4px; z-index: 999; }
+        .btn-recolher:hover { background-color: #34495e; }
+ 
+        .conteudo { flex: 1; padding: 40px 60px; background-color: #f0f2f5; display: flex; justify-content: center; align-items: flex-start; overflow-y: auto; }
+        .pagina { display: none; width: 100%; max-width: 600px; }
+        .pagina.ativa { display: block; }
+ 
+        .card { background-color: white; border-radius: 10px; padding: 30px; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card h2 { font-size: 18px; color: #333; margin-bottom: 24px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+ 
+        .linha { display: flex; gap: 16px; margin-bottom: 16px; }
+        .campo { display: flex; flex-direction: column; flex: 1; }
+        .campo label { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .campo input, .campo select { padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; background-color: #f9f9f9; }
+        .campo input:focus, .campo select:focus { border-color: #3498db; background-color: white; }
+        .campo input:disabled, .campo select:disabled { background-color: #f0f0f0; color: #333; }
+ 
+        .botoes { display: flex; gap: 12px; margin-top: 24px; }
+        .btn-salvar { padding: 10px 24px; background-color: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .btn-salvar:hover { background-color: #2980b9; }
+        .btn-editar { padding: 10px 24px; background-color: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .btn-editar:hover { background-color: #7f8c8d; }
+ 
+        .mensagem { margin-top: 16px; font-size: 13px; }
+ 
+        .dados-salvos { margin-top: 24px; border-top: 1px solid #eee; padding-top: 16px; display: none; }
+        .dados-salvos h3 { font-size: 14px; color: #333; margin-bottom: 12px; }
+        .dados-salvos p { font-size: 13px; color: #555; margin-bottom: 6px; }
+        .dados-salvos span { font-weight: bold; color: #333; }
+ 
+        .card-paciente { display: none; background: linear-gradient(135deg, #3498db, #2c3e50); border-radius: 10px; padding: 24px; color: white; margin-bottom: 20px; }
+        .card-paciente .avatar { width: 56px; height: 56px; border-radius: 50%; background-color: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 14px; }
+        .card-paciente h3 { font-size: 24px; margin-bottom: 10px; }
+        .card-paciente .info-linha { font-size: 16px; opacity: 0.85; margin-bottom: 8px; }
+        .badge { display: inline-block; background-color: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 15px; margin-top: 12px; }
+ 
+        .lista-med { margin-top: 20px; }
+        .item-med { background-color: #f8f9fa; border-left: 4px solid #3498db; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .item-med .info p { font-size: 14px; color: #333; font-weight: bold; }
+        .item-med .info span { font-size: 12px; color: #666; }
+        .btn-excluir { background-color: #e74c3c; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px; }
+        .btn-excluir:hover { background-color: #c0392b; }
+        .vazio { font-size: 13px; color: #aaa; text-align: center; padding: 20px 0; }
+ 
+        /* ── ALARMES ── */
+        .alarme-form { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .alarme-form h3 { font-size: 14px; color: #555; margin-bottom: 12px; }
+ 
+        .lista-alarmes { margin-top: 4px; }
+ 
+        .item-alarme {
+            background: white;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e9ecef;
+            transition: border-color 0.2s;
+        }
+        .item-alarme.ativo-agora { border-color: #f39c12; background: #fffbf0; }
+ 
+        .alarme-esq { display: flex; align-items: center; gap: 14px; }
+        .alarme-hora { font-size: 22px; font-weight: bold; color: #2c3e50; min-width: 56px; }
+        .alarme-info p { font-size: 14px; color: #333; font-weight: bold; margin-bottom: 2px; }
+        .alarme-info span { font-size: 12px; color: #666; }
+        .alarme-dias { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+        .dia-pill { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: #e8f4fd; color: #2980b9; font-weight: bold; }
+        .tag-tratamento { font-size: 10px; background: #eee; color: #666; padding: 2px 6px; border-radius: 4px; margin-left: 5px; text-transform: uppercase; }
+ 
+        .alarme-dir { display: flex; align-items: center; gap: 10px; }
+ 
+        .toggle { position: relative; width: 40px; height: 22px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; inset: 0; background: #ccc; border-radius: 22px; cursor: pointer; transition: 0.3s; }
+        .slider:before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+        .toggle input:checked + .slider { background: #2ecc71; }
+        .toggle input:checked + .slider:before { transform: translateX(18px); }
+ 
+        /* ── NOTIFICAÇÃO TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2c3e50;
+            color: white;
+            padding: 16px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            display: none;
+            z-index: 9999;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.show { display: block; }
+        .toast .toast-titulo { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+        .toast .toast-fechar { position: absolute; top: 8px; right: 12px; cursor: pointer; opacity: 0.7; font-size: 16px; }
+        .toast .toast-fechar:hover { opacity: 1; }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+ 
+        /* ── PRÓXIMO ALARME (card início) ── */
+        .card-proximo { display: none; background: linear-gradient(135deg, #f39c12, #e67e22); border-radius: 10px; padding: 20px 24px; color: white; margin-bottom: 20px; }
+        .card-proximo h4 { font-size: 13px; opacity: 0.85; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-proximo .prox-hora { font-size: 32px; font-weight: bold; margin-bottom: 4px; }
+        .card-proximo .prox-med { font-size: 15px; opacity: 0.9; }
+ 
+        /* LISTA TRATAMENTOS INICIO */
+        .lista-tags-inicio { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .tag-inicio { background: #e0e0e0; color: #444; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+ 
+<button class="btn-recolher" onclick="recolher()">☰</button>
+ 
+<div class="menu" id="menu">
+    <h2>SISTEMA</h2>
+    <a href="#" onclick="mostrar('inicio')"        class="ativo">🏠 Início</a>
+    <a href="#" onclick="mostrar('dados')"                         >👤 Dados básicos</a>
+    <a href="#" onclick="mostrar('medicamentos')"                >💊 Medicamentos</a>
+    <a href="#" onclick="mostrar('alarmes')"                     >⏰ Alarmes</a>
+    <a href="#" onclick="mostrar('configuracoes')"              >⚙️ Configurações</a>
+    <a href="#"                                                  >🚪 Sair</a>
+</div>
+ 
+<div class="conteudo">
+ 
+    <div class="pagina ativa" id="pagina-inicio">
+        <div class="card">
+            <h2>🏠 Bem vindo!</h2>
+            <p style="color:#666; font-size:14px;">Selecione uma opção no menu lateral.</p>
+            <div id="container-tratamentos" style="margin-top: 20px; display: none;">
+                <p style="font-size: 12px; color: #888; text-transform: uppercase;">Tratamentos Ativos:</p>
+                <div class="lista-tags-inicio" id="lista-tratamentos-inicio"></div>
+            </div>
+        </div>
+        <div class="card-proximo" id="card-proximo">
+            <h4>⏰ Próximo medicamento</h4>
+            <div class="prox-hora" id="prox-hora">--:--</div>
+            <div class="prox-med"  id="prox-med">—</div>
+        </div>
+        <div class="card-paciente" id="card-paciente">
+            <div class="avatar">👤</div>
+            <h3 id="i-nome"></h3>
+            <p class="info-linha">📄 CPF: <span id="i-cpf"></span></p>
+            <p class="info-linha">🎂 Nascimento: <span id="i-datanasc"></span></p>
+            <p class="info-linha">📍 <span id="i-endereco"></span></p>
+            <span class="badge">🩸 <span id="i-tipo"></span></span>
+        </div>
+    </div>
+ 
+    <div class="pagina" id="pagina-dados">
+        <div class="card">
+            <h2>👤 Dados Básicos</h2>
+            <div class="linha"><div class="campo"><label>Nome completo</label><input id="nome" type="text" placeholder="Nome completo" disabled/></div></div>
+            <div class="linha">
+                <div class="campo"><label>CPF</label><input id="cpf" type="text" placeholder="000.000.000-00" disabled/></div>
+                <div class="campo"><label>Data de nascimento</label><input id="datanasc" type="date" disabled/></div>
+                <div class="campo" style="max-width:120px"><label>Tipo sanguíneo</label>
+                    <select id="tipo" disabled>
+                        <option value="">--</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                        <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                    </select>
+                </div>
+            </div>
+            <div class="linha">
+                <div class="campo"><label>Rua</label><input id="rua" type="text" placeholder="Nome da rua" disabled/></div>
+                <div class="campo" style="max-width:100px"><label>Número</label><input id="numero" type="text" placeholder="Nº" disabled/></div>
+            </div>
+            <div class="linha">
+                <div class="campo"><label>Bairro</label><input id="bairro" type="text" placeholder="Bairro" disabled/></div>
+                <div class="campo"><label>Cidade/UF</label><input id="cidade" type="text" placeholder="Cidade - UF" disabled/></div>
+            </div>
+            <div class="botoes">
+                <button class="btn-editar" onclick="editar()">✏️ Editar</button>
+                <button class="btn-salvar" onclick="salvar()">💾 Salvar</button>
+            </div>
+            <p class="mensagem" id="mensagem"></p>
+            <div class="dados-salvos" id="dados-salvos">
+                <h3>✅ Dados salvos:</h3>
+                <p>Nome: <span id="s-nome"></span></p>
+                <p>CPF: <span id="s-cpf"></span></p>
+                <p>Nascimento: <span id="s-datanasc"></span></p>
+                <p>Tipo sanguíneo: <span id="s-tipo"></span></p>
+                <p>Endereço: <span id="s-endereco"></span></p>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="pagina" id="pagina-medicamentos">
+        <div class="card">
+            <h2>💊 Medicamentos</h2>
+            <div class="linha"><div class="campo"><label>Nome do medicamento</label><input id="med-nome" type="text" placeholder="Ex: Losartana"/></div></div>
+            <div class="linha">
+                <div class="campo"><label>Dosagem</label><input id="med-dosagem" type="number" placeholder="Ex: 50"/></div>
+                <div class="campo" style="max-width:100px"><label>Unidade</label>
+                    <select id="med-unidade"><option>mg</option><option>mcg</option><option>g</option></select>
+                </div>
+                <div class="campo"><label>Tratamento</label>
+                    <select id="med-tratamento">
+                        <option value="">Selecione...</option>
+                        <option>Hipertensão</option><option>Diabetes</option>
+                        <option>Epilepsia</option><option>Tireoide</option>
+                    </select>
+                </div>
+            </div>
+            <div class="botoes"><button class="btn-salvar" onclick="adicionarMed()">➕ Adicionar</button></div>
+            <p class="mensagem" id="med-mensagem"></p>
+            <div class="lista-med" id="lista-med"><p class="vazio">Nenhum medicamento cadastrado.</p></div>
+        </div>
+    </div>
+ 
+    <div class="pagina" id="pagina-alarmes">
+        <div class="card">
+            <h2>⏰ Alarmes de medicamentos</h2>
+ 
+            <div class="alarme-form">
+                <h3>Novo alarme</h3>
+                <div class="linha">
+                    <div class="campo">
+                        <label>Medicamento</label>
+                        <select id="al-med"><option value="">Selecione...</option></select>
+                    </div>
+                    <div class="campo" style="max-width:130px">
+                        <label>Horário</label>
+                        <input id="al-hora" type="time"/>
+                    </div>
+                </div>
+                <div class="linha" style="margin-bottom:0">
+                    <div class="campo">
+                        <label>Dias da semana</label>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="dias-semana">
+                            <label class="dia-check" data-dia="Dom"><input type="checkbox" value="Dom"> Dom</label>
+                            <label class="dia-check" data-dia="Seg"><input type="checkbox" value="Seg" checked> Seg</label>
+                            <label class="dia-check" data-dia="Ter"><input type="checkbox" value="Ter" checked> Ter</label>
+                            <label class="dia-check" data-dia="Qua"><input type="checkbox" value="Qua" checked> Qua</label>
+                            <label class="dia-check" data-dia="Qui"><input type="checkbox" value="Qui" checked> Qui</label>
+                            <label class="dia-check" data-dia="Sex"><input type="checkbox" value="Sex" checked> Sex</label>
+                            <label class="dia-check" data-dia="Sáb"><input type="checkbox" value="Sáb"> Sáb</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="botoes">
+                    <button class="btn-salvar" onclick="adicionarAlarme()">⏰ Adicionar alarme</button>
+                </div>
+                <p class="mensagem" id="al-mensagem"></p>
+            </div>
+ 
+            <div class="lista-alarmes" id="lista-alarmes">
+                <p class="vazio">Nenhum alarme cadastrado.</p>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="pagina" id="pagina-configuracoes">
+        <div class="card">
+            <h2>⚙️ Configurações</h2>
+            <p style="color:#666; font-size:14px;">Em desenvolvimento.</p>
+        </div>
+    </div>
+ 
+</div>
+ 
+<div class="toast" id="toast">
+    <span class="toast-fechar" onclick="fecharToast()">✕</span>
+    <div class="toast-titulo" id="toast-titulo"></div>
+    <div id="toast-corpo"></div>
+</div>
+ 
+<style>
+.dia-check {
+    font-size: 12px; cursor: pointer; padding: 4px 10px;
+    border-radius: 20px; border: 1px solid #ddd; background: #f9f9f9;
+    user-select: none; display: flex; align-items: center; gap: 4px;
+}
+.dia-check input { display: none; }
+.dia-check:has(input:checked) { background: #3498db; color: white; border-color: #3498db; }
+</style>
+ 
+<script>
+const $ = id => document.getElementById(id);
+const state = { paciente: {}, medicamentos: [], alarmes: [] };
+ 
+// ── Menu ──
+document.querySelectorAll(".menu a").forEach(link =>
+    link.addEventListener("click", () => {
+        document.querySelectorAll(".menu a").forEach(l => l.classList.remove("ativo"));
+        link.classList.add("ativo");
+    })
+);
+ 
+function recolher() {
+    const menu = $("menu");
+    menu.classList.toggle("recolhido");
+    document.querySelector(".btn-recolher").innerHTML =
+        menu.classList.contains("recolhido") ? "»" : "☰";
+}
+ 
+function mostrar(pagina) {
+    document.querySelectorAll(".pagina").forEach(p => p.classList.remove("ativa"));
+    $("pagina-" + pagina).classList.add("ativa");
+    if (pagina === "alarmes") atualizarSelectMeds();
+}
+ 
+// ── Dados básicos ──
+function editar() {
+    document.querySelectorAll("#pagina-dados input, #pagina-dados select")
+        .forEach(c => c.disabled = false);
+    $("mensagem").textContent = "";
+}
+ 
+function salvar() {
+    const get = id => $(id).value.trim();
+    const nome = get("nome"), cpf = get("cpf");
+    const msg = $("mensagem");
+    if (!nome || !cpf) { msg.style.color = "red"; msg.textContent = "Nome e CPF são obrigatórios!"; return; }
+ 
+    const endereco = `${get("rua")}, ${get("numero")} - ${get("bairro")} - ${get("cidade")}`;
+    state.paciente = { nome, cpf, datanasc: get("datanasc"), tipo: get("tipo"), endereco };
+ 
+    ["nome","cpf","datanasc","tipo","endereco"].forEach(k => {
+        const s = $("s-" + k), i = $("i-" + k);
+        if (s) s.textContent = state.paciente[k];
+        if (i) i.textContent = state.paciente[k];
+    });
+ 
+    document.querySelectorAll("#pagina-dados input, #pagina-dados select")
+        .forEach(c => c.disabled = true);
+ 
+    $("card-paciente").style.display = "block";
+    $("dados-salvos").style.display  = "block";
+    msg.style.color = "green";
+    msg.textContent = "Dados salvos com sucesso!";
+}
+ 
+// ── Medicamentos ──
+function adicionarMed() {
+    const get = id => $(id).value.trim();
+    const nome = get("med-nome"), dosagem = get("med-dosagem"), tratamento = get("med-tratamento");
+    const msg = $("med-mensagem");
+    if (!nome || !dosagem || !tratamento) { msg.style.color = "red"; msg.textContent = "Preencha todos os campos!"; return; }
+ 
+    state.medicamentos.push({ nome, dosagem, unidade: $("med-unidade").value, tratamento });
+    ["med-nome","med-dosagem","med-tratamento"].forEach(id => $(id).value = "");
+    $("med-nome").focus();
+    msg.style.color = "green";
+    msg.textContent = "Medicamento adicionado!";
+    renderMeds();
+    renderTratamentosInicio(); // ATUALIZA INICIO
+}
+ 
+function excluirMed(i) {
+    state.medicamentos.splice(i, 1);
+    renderMeds();
+    renderTratamentosInicio(); // ATUALIZA INICIO
+}
+ 
+function renderMeds() {
+    const lista = $("lista-med");
+    lista.innerHTML = !state.medicamentos.length
+        ? '<p class="vazio">Nenhum medicamento cadastrado.</p>'
+        : state.medicamentos.map((m, i) => `
+            <div class="item-med">
+                <div class="info"><p>💊 ${m.nome}</p><span>${m.dosagem} ${m.unidade} — ${m.tratamento}</span></div>
+                <button class="btn-excluir" onclick="excluirMed(${i})">✕ Remover</button>
+            </div>`).join("");
+}
+ 
+// ── NOVO: Renderiza tratamentos na home ──
+function renderTratamentosInicio() {
+    const container = $("container-tratamentos");
+    const lista = $("lista-tratamentos-inicio");
+   
+    // Pega tratamentos únicos
+    const tratamentos = [...new Set(state.medicamentos.map(m => m.tratamento))];
+   
+    if (tratamentos.length > 0) {
+        container.style.display = "block";
+        lista.innerHTML = tratamentos.map(t => `<span class="tag-inicio">${t}</span>`).join("");
+    } else {
+        container.style.display = "none";
+    }
+}
+ 
+// ── Alarmes ──
+function atualizarSelectMeds() {
+    const sel = $("al-med");
+    const atual = sel.value;
+    sel.innerHTML = '<option value="">Selecione...</option>' +
+        state.medicamentos.map((m, i) =>
+            `<option value="${i}" ${atual == i ? "selected" : ""}>${m.nome} ${m.dosagem}${m.unidade}</option>`
+        ).join("");
+}
+ 
+function diasSelecionados() {
+    return [...document.querySelectorAll("#dias-semana input:checked")].map(c => c.value);
+}
+ 
+function adicionarAlarme() {
+    const medIdx = $("al-med").value;
+    const hora   = $("al-hora").value;
+    const dias   = diasSelecionados();
+    const msg    = $("al-mensagem");
+ 
+    if (!medIdx && medIdx !== 0) { msg.style.color = "red"; msg.textContent = "Selecione um medicamento!"; return; }
+    if (!hora)  { msg.style.color = "red"; msg.textContent = "Defina um horário!"; return; }
+    if (!dias.length) { msg.style.color = "red"; msg.textContent = "Selecione ao menos um dia!"; return; }
+ 
+    const med = state.medicamentos[medIdx];
+    // ADICIONADO: 'tratamento' no objeto do alarme
+    state.alarmes.push({
+        id: Date.now(),
+        med: med.nome,
+        dose: `${med.dosagem}${med.unidade}`,
+        hora,
+        dias,
+        ativo: true,
+        tratamento: med.tratamento
+    });
+ 
+    msg.style.color = "green";
+    msg.textContent = "Alarme adicionado!";
+    $("al-hora").value = "";
+    renderAlarmes();
+    atualizarProximo();
+}
+ 
+function excluirAlarme(id) {
+    state.alarmes = state.alarmes.filter(a => a.id !== id);
+    renderAlarmes();
+    atualizarProximo();
+}
+ 
+function toggleAlarme(id) {
+    const a = state.alarmes.find(a => a.id === id);
+    if (a) a.ativo = !a.ativo;
+    renderAlarmes();
+    atualizarProximo();
+}
+ 
+function renderAlarmes() {
+    const lista = $("lista-alarmes");
+    lista.innerHTML = !state.alarmes.length
+        ? '<p class="vazio">Nenhum alarme cadastrado.</p>'
+        : state.alarmes.map(a => `
+            <div class="item-alarme ${a.ativo ? '' : 'desativado'}" id="alarme-${a.id}">
+                <div class="alarme-esq">
+                    <div class="alarme-hora">${a.hora}</div>
+                    <div class="alarme-info">
+                        <p>💊 ${a.med} <span class="tag-tratamento">${a.tratamento}</span></p>
+                        <span>${a.dose}</span>
+                        <div class="alarme-dias">${a.dias.map(d => `<span class="dia-pill">${d}</span>`).join("")}</div>
+                    </div>
+                </div>
+                <div class="alarme-dir">
+                    <label class="toggle">
+                        <input type="checkbox" ${a.ativo ? "checked" : ""} onchange="toggleAlarme(${a.id})">
+                        <span class="slider"></span>
+                    </label>
+                    <button class="btn-excluir" onclick="excluirAlarme(${a.id})">✕</button>
+                </div>
+            </div>`).join("");
+}
+ 
+// ── Card "próximo" na página início ──
+function atualizarProximo() {
+    const agora = new Date();
+    const hhmm  = (h, m) => h * 60 + m;
+    const agoraMin = hhmm(agora.getHours(), agora.getMinutes());
+    const diasNome = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+    const diaHoje  = diasNome[agora.getDay()];
+ 
+    const candidatos = state.alarmes
+        .filter(a => a.ativo && a.dias.includes(diaHoje))
+        .map(a => { const [h, m] = a.hora.split(":").map(Number); return { ...a, min: hhmm(h, m) }; })
+        .filter(a => a.min > agoraMin)
+        .sort((a, b) => a.min - b.min);
+ 
+    const card = $("card-proximo");
+    if (candidatos.length) {
+        $("prox-hora").textContent = candidatos[0].hora;
+        $("prox-med").textContent  = `${candidatos[0].med} — ${candidatos[0].dose}`;
+        card.style.display = "block";
+    } else {
+        card.style.display = "none";
+    }
+}
+ 
+// ── Verificador de alarmes (roda a cada 30s) ──
+function verificarAlarmes() {
+    const agora = new Date();
+    const horaAtual = `${String(agora.getHours()).padStart(2,"0")}:${String(agora.getMinutes()).padStart(2,"0")}`;
+    const diasNome  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+    const diaHoje   = diasNome[agora.getDay()];
+ 
+    state.alarmes.forEach(a => {
+        if (a.ativo && a.hora === horaAtual && a.dias.includes(diaHoje)) {
+            dispararAlarme(a);
+        }
+    });
+ 
+    atualizarProximo();
+}
+ 
+function dispararAlarme(alarme) {
+    // Evita disparos múltiplos no mesmo minuto
+    if (alarme.ultimoDisparo === new Date().getMinutes()) return;
+    alarme.ultimoDisparo = new Date().getMinutes();
+ 
+    $("toast-titulo").textContent = "⏰ Hora do medicamento!";
+    $("toast-corpo").textContent  = `${alarme.med} — ${alarme.dose}`;
+    const toast = $("toast");
+    toast.classList.add("show");
+ 
+    // destaca o item na lista
+    const el = $("alarme-" + alarme.id);
+    if (el) el.classList.add("ativo-agora");
+    setTimeout(() => { if (el) el.classList.remove("ativo-agora"); }, 60000);
+ 
+    // VOZ: Falar o tratamento
+    const falar = new SpeechSynthesisUtterance(`Atenção. Hora de tomar o remédio para ${alarme.tratamento}`);
+    falar.lang = 'pt-BR';
+    window.speechSynthesis.speak(falar);
+ 
+    // toca som via AudioContext
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [0, 0.3, 0.6].forEach(t => {
+            const osc  = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.3, ctx.currentTime + t);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+            osc.start(ctx.currentTime + t);
+            osc.stop(ctx.currentTime + t + 0.3);
+        });
+    } catch(e) {}
+ 
+    // fecha automaticamente após 10s
+    setTimeout(fecharToast, 10000);
+}
+ 
+function fecharToast() { $("toast").classList.remove("show"); }
+ 
+// ── Init ──
+setInterval(verificarAlarmes, 30000);
+verificarAlarmes();
+</script>
+ 
+</body>
+</html>
+ 

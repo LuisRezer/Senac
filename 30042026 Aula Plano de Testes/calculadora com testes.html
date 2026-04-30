@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>Calculadora Simples com Testes</title>
+</head>
+<body>
+    <input id="num1" type="number" placeholder="Número 1">
+    <input id="num2" type="number" placeholder="Número 2">
+    <div id="resultado"></div>
+    <button onclick="Somar()">Somar</button>
+    <button onclick="Subtrair()">Subtrair</button>
+    <button onclick="Multiplicar()">Multiplicar</button>
+    <button onclick="Dividir()">Dividir</button>
+
+<script>
+    // --- SUAS FUNÇÕES ORIGINAIS ---
+    function Somar() {
+        let n1 = parseFloat(document.getElementById("num1").value);
+        let n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML = "Resultado: " + (n1 + n2);
+    }
+
+    function Subtrair() {
+        let n1 = parseFloat(document.getElementById("num1").value);
+        let n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML = "Resultado: " + (n1 - n2);
+    }
+    
+    function Multiplicar() {
+        let n1 = parseFloat(document.getElementById("num1").value);
+        let n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML = "Resultado: " + (n1 * n2);
+    }
+
+    function Dividir() {
+        let n1 = parseFloat(document.getElementById("num1").value);
+        let n2 = parseFloat(document.getElementById("num2").value);
+        document.getElementById("resultado").innerHTML = "Resultado: " + (n1 / n2);
+    }
+
+    // --- SCRIPT DE TESTE PARA CADA OPERAÇÃO ---
+    function rodarTestes() {
+        console.log("Iniciando bateria de testes...");
+
+        let campo1 = document.getElementById("num1");
+        let campo2 = document.getElementById("num2");
+        let divRes = document.getElementById("resultado");
+
+        // Lista de casos de teste: [valor1, valor2, função, resultado esperado]
+        let testes = [
+            { operacao: "Soma", v1: 10, v2: 5, acao: Somar, esperado: "Resultado: 15" },
+            { operacao: "Subtração", v1: 20, v2: 8, acao: Subtrair, esperado: "Resultado: 12" },
+            { operacao: "Multiplicação", v1: 5, v2: 4, acao: Multiplicar, esperado: "Resultado: 20" },
+            { operacao: "Divisão", v1: 100, v2: 2, acao: Dividir, esperado: "Resultado: 50" }
+        ];
+
+        testes.forEach(t => {
+            // 1. Simula a digitação do usuário
+            campo1.value = t.v1;
+            campo2.value = t.v2;
+
+            // 2. Executa a operação
+            t.acao();
+
+            // 3. Verifica se o texto na DIV é o esperado
+            if (divRes.innerHTML === t.esperado) {
+                console.log(`Teste ${t.operacao}: PASSOU (${t.esperado})`);
+            } else {
+                console.error(`Teste ${t.operacao}: FALHOU! (Esperado: ${t.esperado}, Obtido: ${divRes.innerHTML})`);
+            }
+        });
+
+        // Limpa os campos após o teste
+        campo1.value = "";
+        campo2.value = "";
+        console.log("Fim dos testes.");
+    }
+
+    // Executa os testes automaticamente ao carregar a página
+    window.onload = rodarTestes;
+
+</script>
+</body>
+</html>
