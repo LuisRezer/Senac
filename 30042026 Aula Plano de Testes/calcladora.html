@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Calculadora HTML</title>
+    <style>
+        /* CSS: Deixando a calculadora bonita */
+        body { font-family: sans-serif; display: flex; justify-content: center; margin-top: 50px; background-color: #f4f4f9; }
+        .calculadora { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        select { padding: 10px; margin-bottom: 10px; width: 100%; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        #resultado { margin-top: 15px; font-weight: bold; text-align: center; color: #333; }
+    </style>
+</head>
+<body>
+
+<div class="calculadora">
+    <h2>Calculadora Simples</h2>
+    
+    <!-- Entradas de dados -->
+    <input type="number" id="n1" placeholder="Primeiro número">
+    
+    <select id="operacao">
+        <option value="soma">+</option>
+        <option value="subtracao">-</option>
+        <option value="multiplicacao">*</option>
+        <option value="divisao">/</option>
+    </select>
+
+    <input type="number" id="n2" placeholder="Segundo número">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <!-- Onde o resultado vai aparecer -->
+    <div id="resultado">Resultado: -</div>
+</div>
+
+<script>
+    // JavaScript: A lógica da calculadora
+    function calcular() {
+        // 1. Pegar os valores dos inputs
+        const n1 = parseFloat(document.getElementById('n1').value);
+        const n2 = parseFloat(document.getElementById('n2').value);
+        const operacao = document.getElementById('operacao').value;
+        const display = document.getElementById('resultado');
+
+        // Validação básica: se não for número, pare.
+        if (isNaN(n1) || isNaN(n2)) {
+            display.innerHTML = "Por favor, digite números válidos.";
+            return;
+        }
+
+        let conta;
+
+        // 2. Decidir qual conta fazer
+        if (operacao === "soma") {
+            conta = n1 + n2;
+        } else if (operacao === "subtracao") {
+            conta = n1 - n2;
+        } else if (operacao === "multiplicacao") {
+            conta = n1 * n2;
+        } else if (operacao === "divisao") {
+            if (n2 !== 0) {
+                conta = n1 / n2;
+            } else {
+                display.innerHTML = "Erro: Divisão por zero!";
+                return;
+            }
+        }
+
+        // 3. Mostrar o resultado na tela
+        display.innerHTML = `Resultado: ${conta}`;
+    }
+</script>
+
+</body>
+</html>
