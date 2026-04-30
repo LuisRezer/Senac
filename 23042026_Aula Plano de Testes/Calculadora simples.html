@@ -1,64 +1,99 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <title>Calculadora Simples </title>
+    <meta charset="UTF-8">
+    <title>Calculadora Simples</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        input { margin-bottom: 10px; padding: 5px; }
+        button { margin-right: 5px; padding: 5px 10px; cursor: pointer; }
+        #resultado { font-weight: bold; margin: 15px 0; color:blue; }
+    </style>
 </head>
-
 <body>
+
+    <h2>Calculadora</h2>
+    
+    <input id="num1" type="number" placeholder="Número 1">
+    <input id="num2" type="number" placeholder="Número 2">
+    
+    <div id="resultado">Resultado: -</div>
+
+    <button onclick="Somar()">Somar</button>
+    <button onclick="Subtrair()">Subtrair</button>
+    <button onclick="Multiplicar()">Multiplicar</button>
+    <button onclick="Dividir()">Dividir</button>
+    
+    <hr>
+    <button onclick="comecarTestes()" style="background-color: #eee;">Executar Testes no Console</button>
+
     <script>
+        function pegarValores() {
+            let s1 = document.getElementById("num1").value;
+            let s2 = document.getElementById("num2").value;
+            
+            if (s1 === "" || s2 === "") return null;
+
+            return {
+                n1: parseFloat(s1),
+                n2: parseFloat(s2)
+            };
+        }
+
+        function mostrarResultado(texto) {
+            document.getElementById("resultado").innerHTML = "Resultado: " + texto;
+        }
+
+        function Somar() {
+            let valores = pegarValores();
+            if (!valores) return mostrarResultado("Digite os números!");
+            mostrarResultado(valores.n1 + valores.n2);
+        }
+
+        function Subtrair() {
+            let valores = pegarValores();
+            if (!valores) return mostrarResultado("Digite os números!");
+            mostrarResultado(valores.n1 - valores.n2);
+        }
+
+        function Multiplicar() {
+            let valores = pegarValores();
+            if (!valores) return mostrarResultado("Digite os números!");
+            mostrarResultado(valores.n1 * valores.n2);
+        }
+
+        function Dividir() {
+            let valores = pegarValores();
+            if (!valores) return mostrarResultado("Digite os números!");
+            if (valores.n2 === 0) return mostrarResultado("Erro: Divisão por zero");
+            mostrarResultado(valores.n1 / valores.n2);
+        }
+
+        function comecarTestes() {
+            console.log("Iniciando testes...");
+            let campo1 = document.getElementById("num1");
+            let campo2 = document.getElementById("num2");
+            
+            let testes = [
+                { operacao: "Soma", v1: 10, v2: 5, acao: Somar, esperado: "Resultado: 15" },
+                { operacao: "Subtração", v1: 20, v2: 8, acao: Subtrair, esperado: "Resultado: 12" },
+                { operacao: "Multiplicação", v1: 5, v2: 4, acao: Multiplicar, esperado: "Resultado: 20" },
+                { operacao: "Divisão", v1: 100, v2: 2, acao: Dividir, esperado: "Resultado: 50" }
+            ];
+
+            testes.forEach(t => {
+                campo1.value = t.v1;
+                campo2.value = t.v2;
+                t.acao(); 
+                let resultadoAtual = document.getElementById("resultado").innerHTML;
+                
+                if (resultadoAtual === t.esperado) {
+                    console.log(`${t.operacao}: Passou!`);
+                } else {
+                    console.error(`${t.operacao}: Falhou! (Esperado: ${t.esperado}, Obtido: ${resultadoAtual})`);
+                }
+            });
+        }
     </script>
 </body>
-
 </html>
-<input id="num1" type="number" placeholder="Número 1">
-<input id="num2" type="number" placeholder="Número 2">
-<div id="resultado"></div>
-<button onclick="Somar()">Somar</button>
-<button onclick="Subtrair()">Subtrair</button>
-<button onclick="Multiplicar()">Multiplicar</button>
-<button onclick="Dividir()">Dividir</button>
-<script>
-    function Somar() {
-        const n1 = parseFloat(document.getElementById("num1").value);
-        const n2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("resultado").innerHTML =
-            "Resultado: " + (n1 + n2);
-    }
-
-    function Subtrair() {
-        const n1 = parseFloat(document.getElementById("num1").value);
-        const n2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("resultado").innerHTML =
-            "Resultado: " + (n1 - n2);
-    }
-    
-    function Multiplicar() {
-        const n1 = parseFloat(document.getElementById("num1").value);
-        const n2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("resultado").innerHTML =
-            "Resultado: " + (n1 * n2);
-    }
-
-    function Dividir() {
-        const n1 = parseFloat(document.getElementById("num1").value);
-        const n2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("resultado").innerHTML =
-            "Resultado: " + (n1 / n2);
-    }
-    if (isNaN(num1) || isNaN(num2)) {
-        document.getElementById("resultado").innerHTML =
-            "Por favor, digite números válidos.";
-
-
-    }
-
-    else {
-        document.getElementById("resultado").innerHTML =
-            "Resultado: " + (num1 + num2);
-        "Resultado: " - (num1 - num2);
-        "Resultado: " * (num1 * num2);
-        "Resultado: " / (num1 / num2);
-
-
-    }
-</script>
