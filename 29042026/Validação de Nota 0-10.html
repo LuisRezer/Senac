@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Validação de Notas</title>
+</head>
+<body>
+
+    <h2>Validação de Notas</h2>
+    
+    <label>Digite a nota (0 a 10):</label>
+    <input type="number" id="nota" step="0.1">
+    <button onclick="validarNota()">Verificar Status</button>
+
+    <p id="mensagem"></p>
+
+    <script>
+        function validarNota() {
+            var notaInput = document.getElementById('nota').value;
+            var mensagem = document.getElementById('mensagem');
+            var nota = parseFloat(notaInput);
+
+            // Lógica de Validação
+            if (isNaN(nota) || nota < 0 || nota > 10) {
+                mensagem.innerText = "Nota Inválida";
+            } 
+            else if (nota >= 7) {
+                mensagem.innerText = "Aprova";
+            } 
+            else if (nota >= 5 && nota < 7) {
+                mensagem.innerText = "Recuperação";
+            } 
+            else {
+                mensagem.innerText = "Reprovado";
+            }
+        }
+    </script>
+
+</body>
+</html>
