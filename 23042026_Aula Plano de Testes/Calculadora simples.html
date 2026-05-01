@@ -2,98 +2,106 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Simples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Pro com Testes</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        input { margin-bottom: 10px; padding: 5px; }
-        button { margin-right: 5px; padding: 5px 10px; cursor: pointer; }
-        #resultado { font-weight: bold; margin: 15px 0; color:blue; }
+        :root { --primary: #2563eb; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 2rem; }
+        
+        /* Estilo da Calculadora */
+        .calc-card { background: white; padding: 1.5rem; border-radius: 1rem; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); width: 300px; border: 1px solid #e2e8f0; }
+        input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; box-sizing: border-box; font-size: 1.2rem; text-align: right; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+        button { padding: 1rem; border: none; border-radius: 0.5rem; background: #e2e8f0; cursor: pointer; font-weight: bold; }
+        button:hover { background: #cbd5e1; }
+        .btn-op { background: var(--primary); color: white; }
+        .btn-equal { background: var(--success); color: white; grid-column: span 2; }
+
+        /* Estilo do Painel de Testes */
+        .test-panel { margin-top: 2rem; width: 100%; max-width: 500px; background: #1e293b; color: white; padding: 1rem; border-radius: 0.5rem; font-family: monospace; }
+        .test-item { margin-bottom: 0.5rem; padding: 0.25rem; border-radius: 0.25rem; }
+        .pass { background: #064e3b; color: #6ee7b7; }
+        .fail { background: #7f1d1d; color: #fca5a5; }
     </style>
 </head>
 <body>
 
-    <h2>Calculadora</h2>
-    
-    <input id="num1" type="number" placeholder="Número 1">
-    <input id="num2" type="number" placeholder="Número 2">
-    
-    <div id="resultado">Resultado: -</div>
+    <div class="calc-card">
+        <input type="text" id="display" readonly value="0">
+        <div class="grid">
+            <button onclick="add(7)">7</button><button onclick="add(8)">8</button><button onclick="add(9)">9</button><button class="btn-op" onclick="setOp('/')">/</button>
+            <button onclick="add(4)">4</button><button onclick="add(5)">5</button><button onclick="add(6)">6</button><button class="btn-op" onclick="setOp('*')">*</button>
+            <button onclick="add(1)">1</button><button onclick="add(2)">2</button><button onclick="add(3)">3</button><button class="btn-op" onclick="setOp('-')">-</button>
+            <button onclick="add(0)">0</button><button onclick="clearCalc()">C</button><button class="btn-equal" onclick="calculate()">=</button><button class="btn-op" onclick="setOp('+')">+</button>
+        </div>
+    </div>
 
-    <button onclick="Somar()">Somar</button>
-    <button onclick="Subtrair()">Subtrair</button>
-    <button onclick="Multiplicar()">Multiplicar</button>
-    <button onclick="Dividir()">Dividir</button>
-    
-    <hr>
-    <button onclick="comecarTestes()" style="background-color: #eee;">Executar Testes no Console</button>
+    <div class="test-panel">
+        <h3>Saída do Test Runner:</h3>
+        <div id="test-output"></div>
+    </div>
 
     <script>
-        function pegarValores() {
-            let s1 = document.getElementById("num1").value;
-            let s2 = document.getElementById("num2").value;
-            
-            if (s1 === "" || s2 === "") return null;
+        // --- 1. O NÚCLEO (Lógica que será testada) ---
+        const MathCore = {
+            somar: (a, b) => a + b,
+            subtrair: (a, b) => a - b,
+            multiplicar: (a, b) => a * b,
+            dividir: (a, b) => {
+                if (b === 0) throw new Error("Div/0");
+                return a / b;
+            }
+        };
 
-            return {
-                n1: parseFloat(s1),
-                n2: parseFloat(s2)
-            };
+        // --- 2. GERENCIAMENTO DA INTERFACE (UI) ---
+        let currentInput = "";
+        const display = document.getElementById('display');
+
+        function add(val) { currentInput += val; display.value = currentInput; }
+        function clearCalc() { currentInput = ""; display.value = "0"; }
+        function setOp(op) { currentInput += ` ${op} `; display.value = currentInput; }
+        
+        function calculate() {
+            try {
+                // eval() é usado aqui para fins didáticos de simplicidade na UI
+                const result = eval(currentInput); 
+                display.value = result;
+                currentInput = result.toString();
+            } catch {
+                display.value = "Erro";
+                currentInput = "";
+            }
         }
 
-        function mostrarResultado(texto) {
-            document.getElementById("resultado").innerHTML = "Resultado: " + texto;
-        }
+        // --- 3. SUÍTE DE TESTES AUTOMATIZADOS ---
+        function runSuite() {
+            const output = document.getElementById('test-output');
+            output.innerHTML = ""; // Reseta logs
 
-        function Somar() {
-            let valores = pegarValores();
-            if (!valores) return mostrarResultado("Digite os números!");
-            mostrarResultado(valores.n1 + valores.n2);
-        }
-
-        function Subtrair() {
-            let valores = pegarValores();
-            if (!valores) return mostrarResultado("Digite os números!");
-            mostrarResultado(valores.n1 - valores.n2);
-        }
-
-        function Multiplicar() {
-            let valores = pegarValores();
-            if (!valores) return mostrarResultado("Digite os números!");
-            mostrarResultado(valores.n1 * valores.n2);
-        }
-
-        function Dividir() {
-            let valores = pegarValores();
-            if (!valores) return mostrarResultado("Digite os números!");
-            if (valores.n2 === 0) return mostrarResultado("Erro: Divisão por zero");
-            mostrarResultado(valores.n1 / valores.n2);
-        }
-
-        function comecarTestes() {
-            console.log("Iniciando testes...");
-            let campo1 = document.getElementById("num1");
-            let campo2 = document.getElementById("num2");
-            
-            let testes = [
-                { operacao: "Soma", v1: 10, v2: 5, acao: Somar, esperado: "Resultado: 15" },
-                { operacao: "Subtração", v1: 20, v2: 8, acao: Subtrair, esperado: "Resultado: 12" },
-                { operacao: "Multiplicação", v1: 5, v2: 4, acao: Multiplicar, esperado: "Resultado: 20" },
-                { operacao: "Divisão", v1: 100, v2: 2, acao: Dividir, esperado: "Resultado: 50" }
+            const tests = [
+                { name: "Soma básica (10 + 5)", assertion: MathCore.somar(10, 5) === 15 },
+                { name: "Subtração negativa (5 - 10)", assertion: MathCore.subtrair(5, 10) === -5 },
+                { name: "Multiplicação por zero", assertion: MathCore.multiplicar(100, 0) === 0 },
+                { name: "Divisão decimal (5 / 2)", assertion: MathCore.dividir(5, 2) === 2.5 },
+                { 
+                    name: "Proteção contra Divisão por Zero", 
+                    assertion: (() => {
+                        try { MathCore.dividir(10, 0); return false; }
+                        catch(e) { return e.message === "Div/0"; }
+                    })()
+                }
             ];
 
-            testes.forEach(t => {
-                campo1.value = t.v1;
-                campo2.value = t.v2;
-                t.acao(); 
-                let resultadoAtual = document.getElementById("resultado").innerHTML;
-                
-                if (resultadoAtual === t.esperado) {
-                    console.log(`${t.operacao}: Passou!`);
-                } else {
-                    console.error(`${t.operacao}: Falhou! (Esperado: ${t.esperado}, Obtido: ${resultadoAtual})`);
-                }
+            tests.forEach(test => {
+                const el = document.createElement('div');
+                el.className = `test-item ${test.assertion ? 'pass' : 'fail'}`;
+                el.innerText = `${test.assertion ? '✓' : '✗'} ${test.name}`;
+                output.appendChild(el);
             });
         }
+
+        // Executa os testes ao carregar a página
+        runSuite();
     </script>
 </body>
 </html>
